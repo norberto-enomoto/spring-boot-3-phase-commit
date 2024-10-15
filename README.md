@@ -11,6 +11,109 @@ Este projeto implementa um sistema distribuído de compra de ingressos utilizand
 
 O protocolo 3PC é utilizado para assegurar que todas as partes da transação (reserva de ingresso, pagamento e notificação) sejam concluídas com sucesso ou revertidas em caso de falha.
 
+```mermaid
+sequenceDiagram
+    participant Client
+    participant CS as Coordinator Service
+    participant TS as Ticket Service
+    participant PS as Payment Service
+    participant NS as Notification Service
+
+    Client->>CS: Iniciar Transação
+    activate CS
+    CS->>CS: Criar Transação
+
+    Note over CS,NS: Fase 1: Can-Commit
+
+    CS->>TS: canCommit(transactionInfo)
+    activate TS
+    TS->>TS: Verificar disponibilidade do ticket
+    TS-->>CS: Resposta (true/false)
+    deactivate TS
+
+    CS->>PS: canCommit(transactionInfo)
+    activate PS
+    PS->>PS: Verificar saldo suficiente
+    PS-->>CS: Resposta (true/false)
+    deactivate PS
+
+    CS->>NS: canCommit(transactionInfo)
+    activate NS
+    NS->>NS: Verificar disponibilidade do serviço
+    NS-->>CS: Resposta (true/false)
+    deactivate NS
+
+    alt Todos responderam true
+        Note over CS,NS: Fase 2: Pre-Commit
+
+        CS->>TS: preCommit(transactionInfo)
+        activate TS
+        TS->>TS: Reservar ticket
+        TS-->>CS: OK
+        deactivate TS
+
+        CS->>PS: preCommit(transactionInfo)
+        activate PS
+        PS->>PS: Reservar valor
+        PS-->>CS: OK
+        deactivate PS
+
+        CS->>NS: preCommit(transactionInfo)
+        activate NS
+        NS->>NS: Preparar notificação
+        NS-->>CS: OK
+        deactivate NS
+
+        Note over CS,NS: Fase 3: Do-Commit
+
+        CS->>TS: doCommit(transactionInfo)
+        activate TS
+        TS->>TS: Confirmar venda do ticket
+        TS-->>CS: OK
+        deactivate TS
+
+        CS->>PS: doCommit(transactionInfo)
+        activate PS
+        PS->>PS: Processar pagamento
+        PS-->>CS: OK
+        deactivate PS
+
+        CS->>NS: doCommit(transactionInfo)
+        activate NS
+        NS->>NS: Enviar notificação
+        NS-->>CS: OK
+        deactivate NS
+
+        CS->>CS: Atualizar status da transação para COMMITTED
+        CS->>Client: Transação Concluída
+    else Algum serviço respondeu false ou timeout
+        Note over CS,NS: Fase de Abort
+
+        CS->>TS: abort(transactionInfo)
+        activate TS
+        TS->>TS: Liberar reserva do ticket (se houver)
+        TS-->>CS: OK
+        deactivate TS
+
+        CS->>PS: abort(transactionInfo)
+        activate PS
+        PS->>PS: Cancelar reserva do valor (se houver)
+        PS-->>CS: OK
+        deactivate PS
+
+        CS->>NS: abort(transactionInfo)
+        activate NS
+        NS->>NS: Cancelar preparação da notificação
+        NS-->>CS: OK
+        deactivate NS
+
+        CS->>CS: Atualizar status da transação para ABORTED
+        CS->>Client: Transação Abortada
+    end
+
+    deactivate CS
+```
+
 ## Estrutura do Projeto
 
 O projeto é dividido em quatro microsserviços independentes:
