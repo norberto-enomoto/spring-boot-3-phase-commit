@@ -119,7 +119,7 @@ sequenceDiagram
 O projeto é dividido em quatro microsserviços independentes:
 
 ```
-sistema-3pc/
+spring-boot-3-phase-commit/
 │
 ├── coordinator-service/
 │   ├── src/
@@ -156,8 +156,8 @@ sistema-3pc/
 
 1. Clone o repositório:
    ```
-   git clone https://github.com/seu-usuario/sistema-3pc.git
-   cd sistema-3pc
+   git clone https://github.com/norberto-enomoto/spring-boot-3-phase-commit.git
+   cd spring-boot-3-phase-commit
    ```
 
 2. Configure o banco de dados:
