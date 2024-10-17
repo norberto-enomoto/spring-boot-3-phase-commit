@@ -11,5 +11,5 @@ RUN mvn -DskipTests -f /home/app/pom.xml clean package
 #
 FROM amazoncorretto:21.0.4-alpine3.20
 COPY --from=build /home/app/target/ticket-service-0.0.1-SNAPSHOT.jar /usr/local/lib/ticket-service-0.0.1-SNAPSHOT.jar
-EXPOSE 8081
+EXPOSE 8082
 ENTRYPOINT ["java","-jar","/usr/local/lib/ticket-service-0.0.1-SNAPSHOT.jar"]

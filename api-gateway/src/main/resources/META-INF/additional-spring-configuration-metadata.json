@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "spring.cloud.gateway.routes",
+      "type": "java.util.List",
+      "description": "List of routes for the Spring Cloud Gateway."
+    }
+  ]
+}

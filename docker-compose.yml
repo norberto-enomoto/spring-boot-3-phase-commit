@@ -18,6 +18,34 @@ services:
       timeout: 20s
       retries: 10
 
+  eureka-service:
+    image: eureka-service
+    container_name: eureka-service
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "8761:8761"
+    networks:
+      - app-network
+
+  api-gateway:
+    image: api-gateway
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE: http://eureka-service:8761/eureka/      
+    depends_on:
+      coordinator-service:
+        condition: service_started
+      ticket-service:
+        condition: service_started
+      notification-service:
+        condition: service_started
+    networks:
+      - app-network
+
   coordinator-service:
     image: coordinator-service
     container_name: coordinator-service
@@ -25,14 +53,15 @@ services:
       mysql:
         condition: service_healthy      
     ports:
-      - "8080:8080"
+      - "8081:8081"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/coordinator_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: password
-      SERVICE_TICKET_URL: http://service-ticket:8081/api/tickets
-      SERVICE_PAYMENT_URL: http://service-payment:8082/api/payments
-      SERVICE_NOTIFICATION_URL: http://service-notification:8083/api/notifications
+      TICKET_SERVICE_URL: http://ticket-service:8080/api/tickets
+      PAYMENT_SERVICE_URL: http://payment-service:8080/api/payments
+      NOTIFICATION_SERVICE_URL: http://notification-service:8080/api/notifications
+      EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE: http://eureka-service:8761/eureka/
 
     networks:
       - app-network
@@ -44,11 +73,12 @@ services:
       mysql:
         condition: service_healthy
     ports:
-      - "8081:8081"
+      - "8082:8082"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/ticket_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC    
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: password
+      EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE: http://eureka-service:8761/eureka/
     networks:
       - app-network
 
@@ -59,11 +89,12 @@ services:
       mysql:
         condition: service_healthy
     ports:
-      - "8082:8082"
+      - "8083:8083"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/payment_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC        
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: password
+      EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE: http://eureka-service:8761/eureka/
     networks:
       - app-network
 
@@ -74,11 +105,12 @@ services:
       mysql:
         condition: service_healthy
     ports:
-      - "8083:8083"
+      - "8084:8084"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/notification_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC            
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: password
+      EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE: http://eureka-service:8761/eureka/
     networks:
       - app-network
 

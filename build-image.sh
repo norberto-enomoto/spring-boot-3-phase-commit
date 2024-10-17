@@ -11,6 +11,8 @@ build_image() {
 }
 
 # Construir imagens na ordem
+build_image "eureka-service"
+build_image "api-gateway"
 build_image "coordinator-service"
 build_image "ticket-service"
 build_image "payment-service"

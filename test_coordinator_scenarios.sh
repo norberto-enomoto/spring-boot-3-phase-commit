@@ -4,7 +4,7 @@
 COORDINATOR_URL="http://localhost:8080/api/transactions"
 
 # URL base do Ticket Service
-TICKET_URL="http://localhost:8081/api/tickets"
+TICKET_URL="http://localhost:8080/api/tickets"
 
 # Cores para output
 GREEN='\033[0;32m'
