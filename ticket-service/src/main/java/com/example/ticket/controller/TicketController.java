@@ -30,8 +30,9 @@ public class TicketController {
     }
 
     @PostMapping
-    public ResponseEntity<Ticket> createTicket(@RequestBody Ticket ticket) {
-        return ResponseEntity.ok(ticketService.createTicket(ticket));
+    public ResponseEntity<Ticket> createTicket(@RequestBody Ticket ticket) throws RuntimeException  {
+        Ticket ticketRespose = ticketService.createTicket(ticket);
+        return ResponseEntity.ok(ticketRespose);
     }
 
     @PutMapping("/{ticketId}")

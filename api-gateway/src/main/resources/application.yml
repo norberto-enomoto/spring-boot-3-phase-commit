@@ -10,10 +10,10 @@ spring:
           uri: lb://coordinator-service
           predicates:
             - Path=/api/transactions/**                   
-        - id: ticket-service
-          uri: lb://ticket-service
+        - id: ticket-service              
+          uri: lb://ticket-service                    
           predicates:
-            - Path=/api/tickets/**
+            - Path=/api/tickets/**                   
         - id: payment-service
           uri: lb://payment-service
           predicates:

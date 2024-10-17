@@ -13,5 +13,25 @@
     "name": "service.notification.url",
     "type": "java.lang.String",
     "description": "A description for 'service.notification.url'"
+  },
+  {
+    "name": "notification.serviceurl",
+    "type": "java.lang.String",
+    "description": "A description for 'notification.serviceurl'"
+  },
+  {
+    "name": "payment.service.url",
+    "type": "java.lang.String",
+    "description": "A description for 'payment.service.url'"
+  },
+  {
+    "name": "ticket.service.url",
+    "type": "java.lang.String",
+    "description": "A description for 'ticket.service.url'"
+  },
+  {
+    "name": "notification.service.url",
+    "type": "java.lang.String",
+    "description": "A description for 'notification.service.url'"
   }
 ]}

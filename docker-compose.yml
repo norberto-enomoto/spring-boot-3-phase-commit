@@ -58,9 +58,9 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/coordinator_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: password
-      TICKET_SERVICE_URL: http://ticket-service:8080/api/tickets
-      PAYMENT_SERVICE_URL: http://payment-service:8080/api/payments
-      NOTIFICATION_SERVICE_URL: http://notification-service:8080/api/notifications
+      TICKET_SERVICE_URL: http://api-gateway:8080/api/tickets                                                 
+      PAYMENT_SERVICE_URL: http://api-gateway:8080/api/payments
+      NOTIFICATION_SERVICE_URL: http://api-gateway:8080/api/notifications
       EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE: http://eureka-service:8761/eureka/
 
     networks:
